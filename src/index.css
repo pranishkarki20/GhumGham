@@ -1,3 +1,6 @@
 @import "tailwindcss";
 @import '@fontsource/poppins';
 
+* {
+  box-sizing: border-box;
+}

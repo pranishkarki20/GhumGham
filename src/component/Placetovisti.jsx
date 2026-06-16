@@ -7,19 +7,19 @@ import { Link } from "react-router-dom";
 
 export default function Placeto() {
   return (
-    <div className=" mr-9 mt-4 w-full bg-white">
-      <h1 className="text-center text-4xl font-bold mb-8">
-        Place to Visit
+    <div className=" w-full mt-10 shadow-lg ">
+      <h1 className="text-center text-2xl md:text-4xl lg:text-6xl font-bold mb-8 text-gray-600">
+        Top Destination
       </h1>
 
-      <div className="flex gap-50 px-8 overflow-x-scroll">
+      <div className="flex gap-50 p-8  overflow-x-auto">
         <Link to = "/">
         <div
-          className="w-90 h-100 shrink-0 rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
+          className="w-80  h-100 shrink-0  rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
           style={{ backgroundImage: `url(${pokh})` }}
         >
           <div className="w-full bg-black/50 p-4">
-            <h2 className="font-bold text-2xl text-white">
+            <h2 className="font-bold text-2xl text-white md:text-xl">
               Pokhara
             </h2>
 
@@ -31,7 +31,7 @@ export default function Placeto() {
         </Link>
         
         <div
-          className="w-90 h-100  shrink-0 rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
+          className="w-80 h-100  shrink-0 rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
           style={{ backgroundImage: `url(${ktm})` }}>
           <div className="w-full bg-black/50 p-4">
             <h2 className="font-bold text-2xl text-white">
@@ -45,7 +45,7 @@ export default function Placeto() {
         </div>
 
         <div
-          className="w-90 h-100 shrink-0 rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
+          className="w-80 h-100 shrink-0 rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
           style={{ backgroundImage: `url(${mus})` }}>
           <div className="w-full bg-black/50 p-4">
             <h2 className="font-bold text-2xl text-white">
@@ -59,7 +59,7 @@ export default function Placeto() {
         </div>
 
         <div
-          className="w-90 h-100 shrink-0 rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
+          className="w-80 h-100 shrink-0 rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
           style={{ backgroundImage: `url(${man})` }}>
           <div className="w-full bg-black/50 p-4">
             <h2 className="font-bold text-2xl text-white">
@@ -73,7 +73,7 @@ export default function Placeto() {
         </div>
         
         <div
-          className="w-90 h-100 shrink-0 rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
+          className="w-80 h-100 shrink-0 rounded-xl overflow-hidden shadow-lg bg-cover bg-center flex items-end"
           style={{ backgroundImage: `url(${jak})` }}>
           <div className="w-full bg-black/50 p-4">
             <h2 className="font-bold text-2xl text-white">

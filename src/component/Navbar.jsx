@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
-
+import { FaBars, FaTimes, } from "react-icons/fa";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 

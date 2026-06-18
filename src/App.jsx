@@ -6,6 +6,7 @@ import Testimony from './component/testimony';
 import Footer from './component/Footer';
 import LoadingScreen from './component/LoadingScreen';
 import Flight from './pages/flight';
+import Stay from './pages/stay';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
           />
 
           <Route path="/flight" element={<Flight />} />
+          <Route paths= "/stay" element={<Stay />} />
         </Routes>
       </>
     )}

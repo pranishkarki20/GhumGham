@@ -7,6 +7,8 @@ import Footer from './component/Footer';
 import LoadingScreen from './component/LoadingScreen';
 import Flight from './pages/flight';
 import Stay from './pages/stay';
+import Login from './pages/login';
+import Signup from './pages/singup';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 export default function App() {
@@ -24,13 +26,13 @@ export default function App() {
       <LoadingScreen />
     ) : (
       <>
-        <Navbar />
 
         <Routes>
           <Route
             path="/"
             element={
               <>
+               <Navbar />
                 <Home />
                 <Placeto />
                 <Testimony />
@@ -39,8 +41,26 @@ export default function App() {
             }
           />
 
-          <Route path="/flight" element={<Flight />} />
-          <Route paths= "/stay" element={<Stay />} />
+          <Route path="/flight" element={
+            <>
+             <Navbar />
+            <Flight />  </> }
+          />
+          <Route path= "/stay" element={
+            <>
+            <Navbar/>
+            <Stay />
+            </>} />
+          <Route path="/login" element= {
+            <>
+            <Navbar/>
+            <Login />
+            </>} />
+          <Route path="/signup" element= {
+            <>
+            <Navbar/>
+            <Signup />
+            </>} />
         </Routes>
       </>
     )}

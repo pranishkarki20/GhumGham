@@ -1,5 +1,5 @@
 import { User } from "../models/user.model.js";
-
+import  jwt form "jsonwebtoken"
 const registerUser = async(req ,res) =>{
     try {
         const  { username , email , password} = req.body;

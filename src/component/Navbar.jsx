@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaBars, FaTimes, } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -10,11 +11,15 @@ export default function Navbar() {
     { name: "Stay", link: "/stay" },
   ];
 
+  const token = localStorage.getItem("token");
+
   return (
     <nav className="bg-gray-900 text-white px-6 py-4">
       <div className="flex items-center justify-between">
+        {/* Logo */}
         <h1 className="text-3xl font-bold">GhumGham</h1>
 
+        {/* Desktop Navigation */}
         <ul className="hidden md:flex gap-8 font-semibold text-lg">
           {navbar.map((item, index) => (
             <li key={index}>
@@ -30,17 +35,27 @@ export default function Navbar() {
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-3">
-          <Link to="/login">
-            <button className="px-5 py-2 rounded-full border border-white hover:bg-white hover:text-black transition-all duration-300">
-              Login
-            </button>
-          </Link>
+          {token ? (
+            <Link to="/profile">
+              <button className="px-5 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition-all duration-300">
+                Profile
+              </button>
+            </Link>
+          ) : (
+            <>
+              <Link to="/login">
+                <button className="px-5 py-2 rounded-full border border-white hover:bg-white hover:text-black transition-all duration-300">
+                  Login
+                </button>
+              </Link>
 
-          <Link to="/signup">
-            <button className="px-5 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition-all duration-300">
-              Signup
-            </button>
-          </Link>
+              <Link to="/signup">
+                <button className="px-5 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition-all duration-300">
+                  Signup
+                </button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Icon */}
@@ -66,17 +81,36 @@ export default function Navbar() {
             </Link>
           ))}
 
-          <Link to="/login">
-            <button className="w-40 py-2 rounded-full border border-white hover:bg-white hover:text-black transition-all duration-300">
-              Login
-            </button>
-          </Link>
+          {token ? (
+            <Link
+              to="/profile"
+              onClick={() => setMenuOpen(false)}
+            >
+              <button className="w-40 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition-all duration-300">
+                Profile
+              </button>
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                onClick={() => setMenuOpen(false)}
+              >
+                <button className="w-40 py-2 rounded-full border border-white hover:bg-white hover:text-black transition-all duration-300">
+                  Login
+                </button>
+              </Link>
 
-          <Link to="/signup">
-            <button className="w-40 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition-all duration-300">
-              Signup
-            </button>
-          </Link>
+              <Link
+                to="/signup"
+                onClick={() => setMenuOpen(false)}
+              >
+                <button className="w-40 py-2 rounded-full bg-blue-500 hover:bg-blue-600 transition-all duration-300">
+                  Signup
+                </button>
+              </Link>
+            </>
+          )}
         </div>
       )}
     </nav>

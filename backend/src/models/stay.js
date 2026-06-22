@@ -13,7 +13,7 @@ const stay =  new Schema(
         Propertytype:{
             type:String,
             enum:["hotel","home" ,"villa"],
-            require:true;
+            require:true
         },
         Address:{
             type:String, 

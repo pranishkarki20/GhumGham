@@ -1,1 +1,1 @@
-export const dbname = travelwebsite
+export const dbname = "travelwebsite";

@@ -1,17 +1,23 @@
 import mongoose from "mongoose";
-import { defaultClientConditions } from "vite";
 
-const connectDb = async() => {
+const connectDb = async () => {
     try {
-        const connectionInstance = await mongoose.connect
-        (`${process.env.MONGODB_URI}`)
-        console.log(`\n MongoDB Connected 
-           ${connectionInstance.connection.host} `)
+        if (!process.env.MONGODB_URI) {
+            throw new Error("MONGODB_URI is not defined");
+        }
+
+        const connectionInstance = await mongoose.connect(process.env.MONGODB_URI, {
+            serverSelectionTimeoutMS: 5000,
+        });
+
+        console.log(
+            `MongoDB connected: ${connectionInstance.connection.host}`
+        );
 
         
     } catch (error) {
-        console.log("MongogDb connection failed" , error)
-        process.exit(1)
+        console.log("MongoDB connection failed:", error.message);
+        process.exit(1);
     }
 }
 

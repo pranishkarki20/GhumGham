@@ -1,5 +1,4 @@
 import { User } from "../models/user.model.js";
-import  jwt form "jsonwebtoken"
 const registerUser = async(req ,res) =>{
     try {
         const  { username , email , password} = req.body;
@@ -47,6 +46,15 @@ const loginUser = async (req,res) => {
                 message: "Wrong password or Username"
             });
         }
+
+        return res.status(200).json({
+            message: "Login successful",
+            user: {
+                id: user.id,
+                username: user.username,
+                email: user.email
+            }
+        });
         
     } catch (error) {
         res.status(500).json({

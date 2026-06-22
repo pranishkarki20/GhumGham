@@ -1,11 +1,6 @@
-import express from "express";
-import dotenv from "dotenv";
+import "dotenv/config";
 import connectDb from "./config/database.js";
 import app from "./config/app.js";
-
-dotenv.config({
-    path: "./.env"
-});
 
 
 const startServer = async () => {

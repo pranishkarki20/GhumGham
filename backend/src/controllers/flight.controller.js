@@ -57,8 +57,53 @@ const getsflight = async (req, res) => {
         
     }
 }
+const updateFlight = async(req,res) => {
+    try{
+        const upflighr = await Flight.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new: true}
+        ); 
+        if(!upflighr){
+            return res.status(400).json({
+                message : "Flight not found"
+            })
+        }else{
+            res.status(200).json({message:"Flight updated successfully",
+                upflighr
+            });
+        }
+
+}catch(error){
+    res.status(500).json({message:"Internal Server error",
+        error: error.message
+    })
+}
+}
+
+const delflight = async(req,res) =>{
+try{
+    const dflight = await Flight.findByIdAndDelete(req.params.id)
+
+    if(!dflight){
+        return res.status(404).json({
+            message:"Flight not found"
+        })
+    }else{
+        return res.status(200).json({message:"Flight deleted successfully",
+            dflight
+        })
+    } }
+    catch(error){
+        return res.status(500).json({message:"Internal server error" ,
+            error:error.message
+        });
+    }
+}
 export{
     addflight,
     getallfligths,
-    getsflight
+    getsflight,
+    updateFlight,
+    delflight,
 }

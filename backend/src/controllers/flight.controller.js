@@ -1,5 +1,40 @@
 import { Flight } from "../models/flight.models.js";
 
+
+const searchflights = async(req,res) =>{
+    try {
+
+        const{from , to, departureDate} = req.query ;
+        const filter ={}
+
+        if(from){
+             filter.from = { $regex: from, $options: "i" }
+        }
+         if (to) {
+      filter.to = { $regex: to, $options: "i" };
+    }
+
+    if (departureDate) {
+      const startOfDay = new Date(departureDate);
+      const endOfDay = new Date(departureDate);
+      endOfDay.setDate(endOfDay.getDate() + 1);
+
+      filter.deperaturetime = {
+        $gte: startOfDay,
+        $lt: endOfDay,
+      };
+    }
+        
+    const flights = await Flight.find(filter);
+    res.status(200).json(flights);
+    } catch (error) {
+        res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });  
+    }
+}
+
 const addflight =  async(req , res) => {
     try{
         const { flightID, from, to, deperaturetime, arrivaltime, price } = req.body;
@@ -101,6 +136,7 @@ try{
     }
 }
 export{
+    searchflights,
     addflight,
     getallfligths,
     getsflight,

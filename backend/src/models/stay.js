@@ -12,7 +12,8 @@ const stay =  new Schema(
         },
         Propertytype:{
             type:String,
-            enum:["hotel","home" ,"villa"],
+            lowercase:true ,
+            enum:["hotel","home" ,"villa" , ],
             require:true
         },
         Address:{
@@ -31,4 +32,4 @@ const stay =  new Schema(
         images:[String]
     },{timestamps: true}
 );
-export default Stay = mongoose.model("Stay" , stay)
+export  const Stay = mongoose.model("Stay" , stay)

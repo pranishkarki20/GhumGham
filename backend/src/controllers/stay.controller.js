@@ -8,33 +8,36 @@ const searchStay = async (req, res) => {
       where,
       propertytype,
       rooms,
+      guests,
     } = req.query;
 
     const filter = {};
 
-    if (where) {
-      filter.Address = {
-        $regex: where,
-        $options: "i",
-      };
-    }
+if (where) {
+  filter.Address = {
+    $regex: where,
+    $options: "i",
+  };
+}
 
-    if (propertytype) {
-      filter.Propertytype = propertytype.toLowerCase();
-    }
+if (propertytype) {
+  filter.Propertytype = propertytype;
+}
 
-    if (rooms) {
-      filter.Rooms = {
-        $gte: Number(rooms),
-      };
-    }
+if (rooms) {
+  filter.Rooms = {
+    $gte: Number(rooms),
+  };
+}
 
+if (guests) {
+  filter.maxGuests = {
+    $gte: Number(guests),
+  };
+}
     console.log("FILTER:", filter);
 
     const stays = await Stay.find(filter);
-
-    console.log("RESULT:", stays);
-
     res.status(200).json(stays);
   } catch (error) {
     res.status(500).json({

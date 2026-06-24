@@ -75,7 +75,7 @@ const [checkout, setcheckout] = useState("");
 const [stays, setStays] = useState([]);
 const [propertytype, setPropertyType] = useState("hotel");
 const [rooms, setrooms] = useState("1");
-
+const [guests , setguests] = useState("1")
 const [searched, setSearched] = useState(false);
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState("");
@@ -231,11 +231,14 @@ const [error, setError] = useState("");
                   <Users size={16} />
                   Guests
                 </span>
-                <select className="w-full bg-transparent text-lg font-bold outline-none ">
-                  <option>1 guest</option>
-                  <option>2 guests</option>
-                  <option>3 guests</option>
-                  <option>4 guests</option>
+                <select
+                value={guests}
+                onChange={(e) => setguests(e.target.value)}
+                 className="w-full bg-transparent text-lg font-bold outline-none ">
+                  <option value = "1" >1 guests</option>
+                  <option value = "2">2 guests</option>
+                  <option value = "3">3 guests</option>
+                  <option value = "4">4 guests</option>
                 </select>
               </label>
 

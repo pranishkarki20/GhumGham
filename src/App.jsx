@@ -9,6 +9,7 @@ import Flight from './pages/flight';
 import Stay from './pages/stay';
 import Login from './pages/login';
 import Signup from './pages/singup';
+import profile from './pages/profile';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 export default function App() {
@@ -61,6 +62,13 @@ export default function App() {
             <Navbar/>
             <Signup />
             </>} />
+
+            <Route path ="/profile" element = {
+              <>
+              <Navbar/>
+              <profile/>
+              </>
+            }/>
         </Routes>
       </>
     )}

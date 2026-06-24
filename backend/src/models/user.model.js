@@ -26,7 +26,16 @@ const usersSchema = new Schema(
         lowercase: true,
         trim: true,
     },
-},
+    availableFrom: {
+      type: Date,
+      required: true,
+    },
+
+    availableTo: {
+      type: Date,
+      required: true,
+    },
+  },
 {
     timestamps: true,
 }

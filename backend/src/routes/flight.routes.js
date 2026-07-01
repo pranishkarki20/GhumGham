@@ -1,13 +1,13 @@
 import { Router } from "express";
-
+import auth from "../middleware/auth.js"
 import { addflight, delflight } from "../controllers/flight.controller.js";
 import { getallfligths  , getsflight ,updateFlight, searchflights} from "../controllers/flight.controller.js";
 const router = Router();
 
-router.route('/addflight').post(addflight);
-router.route('/').get(getallfligths);
-router.route("/search").get(searchflights);
-router.route('/:id').get(getsflight);
-router.route('/:id').put(updateFlight);
-router.route('/:id').delete(delflight);
+router.route('/addflight').post(auth ,addflight);
+router.route('/').get(auth ,getallfligths);
+router.route("/search").get(auth ,searchflights);
+router.route('/:id').get(auth ,getsflight);
+router.route('/:id').put(auth ,updateFlight);
+router.route('/:id').delete(auth ,delflight);
 export default router

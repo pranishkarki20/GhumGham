@@ -1,8 +1,8 @@
 import express from "express"
-
 import userRouter from "../routes/user.route.js";
 import flightrouter from "../routes/flight.routes.js"
 import stayrouter from "../routes/stay.routes.js"
+import multer from "multer";
 const app = express(); 
 const allowOrigins = (
     process.env.CORS_ORIGINS || "http://localhost:5173"
@@ -15,6 +15,8 @@ const corsOptions = {
     methods : ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 };
+
+const upload = multer({dest:'uploads/'})
 
 app.use((req, res, next) => {
     const origin = req.headers.origin;

@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import jwt from "jsonwebtoken";
 const registerUser = async(req ,res) =>{
     try {
         const  { username , email , password} = req.body;
@@ -46,9 +47,18 @@ const loginUser = async (req,res) => {
                 message: "Wrong password or Username"
             });
         }
-
+        const token = jwt.sign(
+            {
+                id:user._id,
+                role:user.role
+            },
+            process.env.JWT_SECRET,{
+                expiresIn: process.env.JWT_EXPIRES_IN,
+            }
+        )
         return res.status(200).json({
             message: "Login successful",
+            token,
             user: {
                 id: user.id,
                 username: user.username,

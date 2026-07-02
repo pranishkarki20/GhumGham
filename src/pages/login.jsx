@@ -8,7 +8,8 @@ function Login() {
   const [message, setMessage] = useState("");
   async function handleLogin(e) {
     e.preventDefault();
-    const response  = await fetch("http://localhost:4000/api/v1/users/login",{
+    setMessage("")
+   try{ const response  = await fetch("http://localhost:4000/api/v1/users/login",{
       method: "POST",
       headers:{
         "Content-Type" : "application/json",
@@ -21,11 +22,15 @@ function Login() {
     const data = await response.json() ;
     if(response.ok){
       localStorage.setItem("token" , data.token);
+      localStorage.setItem("user" , JSON.stringify(data.user));
       navigate("/")
     }else{
       setMessage(data.message);
     }
-  }
+  }catch (error) {
+        setMessage("Something went wrong. Please try again.");
+    }
+}
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md rounded-md bg-white p-6 shadow-lg sm:p-8 md:p-12">

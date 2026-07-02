@@ -1,22 +1,33 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
-const auth = async(req,res, next) =>{
-    try{
-        const autheHeader = req.headers.authorization ; 
-        if(!autheHeader || !autheHeader.startswith("Bearer ")){
+const auth = (req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res.status(401).json({
-                message:"Access Denied "
+                message: "Access Denied",
             });
         }
-        const token = autheHeader.split(" ")[1];
-        const decode = jwt.verify(token , process.env.JWT_SECRET);
-        req.user = decode ;
+
+        const token = authHeader.split(" ")[1];
+
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        req.user = decoded;
+
         next();
-    }catch(error){
+
+    } catch (error) {
+        console.log(error);
+
         return res.status(401).json({
-            message: "Invalid  or expire token"
+            message: error.message,
         });
     }
-}
+};
 
 export default auth;

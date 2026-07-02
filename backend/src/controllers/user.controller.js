@@ -15,7 +15,7 @@ const registerUser = async(req ,res) =>{
         const user =  await  User.create({
             username,
             email, 
-            password, 
+            password,
             role,
             loggedIn: false ,
         });
@@ -64,7 +64,8 @@ const loginUser = async (req,res) => {
             user: {
                 id: user.id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                role:user.role
             }
         });
         

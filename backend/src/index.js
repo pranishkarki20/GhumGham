@@ -1,7 +1,7 @@
 import "dotenv/config";
 import connectDb from "./config/database.js";
 import app from "./config/app.js";
-
+import passport from "passport";
 
 const startServer = async () => {
     try {

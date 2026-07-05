@@ -10,6 +10,9 @@ import Stay from './pages/stay';
 import Login from './pages/login';
 import Signup from './pages/singup';
 import profile from './pages/profile';
+import AdminDashboard from './pages/AdminDashboard';
+import MyBookings from './pages/MyBookings';
+import Payment from './pages/Payment';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 export default function App() {
@@ -69,6 +72,26 @@ export default function App() {
               <profile/>
               </>
             }/>
+
+            <Route path="/admin" element={
+              <>
+                <Navbar />
+                <AdminDashboard />
+              </>
+            } />
+
+            <Route path="/my-bookings" element={
+              <>
+                <Navbar />
+                <MyBookings />
+              </>
+            } />
+            <Route path="/payment" element={
+              <>
+                <Navbar />
+                <Payment />
+              </>
+            } />
         </Routes>
       </>
     )}

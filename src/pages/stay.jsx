@@ -1,4 +1,5 @@
 import React, {  useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   BedDouble,
   CalendarDays,
@@ -68,6 +69,7 @@ const features = [
   },
 ];
 function Stay() {
+  const navigate = useNavigate();
   const [destination, setdestination] = useState("");
 const [checkin, setcheckin] = useState("");
 const [checkout, setcheckout] = useState("");
@@ -79,6 +81,28 @@ const [guests , setguests] = useState("1")
 const [searched, setSearched] = useState(false);
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState("");
+  const handleBookStay = async (stay) => {
+    // UI-only: create a local booking object and open Payment page.
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    const localBooking = {
+      _id: `local-${Date.now()}`,
+      tripTitle: stay.Name,
+      tripType: 'Stay',
+      destination: stay.Address,
+      startDate: checkin || new Date().toISOString(),
+      endDate: checkout || new Date().toISOString(),
+      amount: Number(stay.pricePerNight || 0),
+      status: 'Pending',
+    };
+
+    navigate('/payment', { state: { booking: localBooking } });
+  };
+
   const handleSearch = async (event) => {
   event.preventDefault();
 
@@ -100,9 +124,21 @@ const [error, setError] = useState("");
       rooms,
     });
 
+    const token = localStorage.getItem("token");
+
     const response = await fetch(
-      `http://localhost:4000/api/v1/stay/search?${query.toString()}`
+      `http://localhost:4000/api/v1/stay/search?${query.toString()}`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      }
     );
+
+    if (response.status === 401) {
+      setStays([]);
+      alert("Please login to search stays.");
+      navigate("/login");
+      return;
+    }
 
     if (!response.ok) {
       throw new Error("No stays found");
@@ -339,8 +375,11 @@ const [error, setError] = useState("");
               </p>
             </div>
 
-            <button className="rounded-full bg-blue-600 px-5 py-2 text-sm font-bold text-white transition hover:bg-blue-700">
-              View Details
+            <button
+              onClick={() => handleBookStay(stay)}
+              className="rounded-full bg-blue-600 px-5 py-2 text-sm font-bold text-white transition hover:bg-blue-700"
+            >
+              Book stay
             </button>
           </div>
         </article>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   CalendarDays,
@@ -54,6 +55,7 @@ const benefits = [
 ];
 
 function Flight() {
+  const navigate = useNavigate();
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [tripType, setTripType] = useState("Round trip");
@@ -63,6 +65,28 @@ function Flight() {
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleBookFlight = async (flight) => {
+    // UI-only: create a local booking object and open Payment page.
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    const localBooking = {
+      _id: `local-${Date.now()}`,
+      tripTitle: `${flight.from} to ${flight.to}`,
+      tripType: 'Flight',
+      destination: flight.to,
+      startDate: flight.deperaturetime,
+      endDate: flight.arrivaltime,
+      amount: Number(flight.price || 0),
+      status: 'Pending',
+    };
+
+    navigate('/payment', { state: { booking: localBooking } });
+  };
 
   const handleSearch = async (event) => {
     event.preventDefault();
@@ -83,9 +107,21 @@ function Flight() {
         departureDate,
       });
 
+      const token = localStorage.getItem("token");
+
       const response = await fetch(
-        `http://localhost:4000/api/v1/flight/search?${query.toString()}`
+        `http://localhost:4000/api/v1/flight/search?${query.toString()}`,
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        }
       );
+
+      if (response.status === 401) {
+        setFlights([]);
+        alert("Please login to search flights.");
+        navigate("/login");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Could not search flights");
@@ -320,7 +356,10 @@ function Flight() {
                       Rs. {flight.price}
                     </p>
                   </div>
-                  <button className="rounded-full bg-blue-600 px-5 py-2 text-sm font-bold text-white transition hover:bg-blue-700">
+                  <button
+                    onClick={() => handleBookFlight(flight)}
+                    className="rounded-full bg-blue-600 px-5 py-2 text-sm font-bold text-white transition hover:bg-blue-700"
+                  >
                     Book now
                   </button>
                 </div>

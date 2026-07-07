@@ -9,11 +9,11 @@ import Flight from './pages/flight';
 import Stay from './pages/stay';
 import Login from './pages/login';
 import Signup from './pages/singup';
-import profile from './pages/profile';
+import Profile from './pages/profile';
 import AdminDashboard from './pages/AdminDashboard';
 import MyBookings from './pages/MyBookings';
 import Payment from './pages/Payment';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 export default function App() {
   const [loading, setloading] = useState(true);
@@ -30,7 +30,6 @@ export default function App() {
       <LoadingScreen />
     ) : (
       <>
-
         <Routes>
           <Route
             path="/"
@@ -66,12 +65,12 @@ export default function App() {
             <Signup />
             </>} />
 
-            <Route path ="/profile" element = {
+          <Route path="/profile" element={
               <>
-              <Navbar/>
-              <profile/>
+                <Navbar />
+                <Profile />
               </>
-            }/>
+            } />
 
             <Route path="/admin" element={
               <>

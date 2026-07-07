@@ -54,6 +54,24 @@ const benefits = [
   },
 ];
 
+const airportNames = {
+  Kathmandu: "Tribhuvan International Airport (KTM)",
+  Pokhara: "Pokhara Regional Airport (PKR)",
+  Janakpur: "Janakpur Airport (JKR)",
+  Bharatpur: "Bharatpur Airport (BHR)",
+  Birgunj: "Simara Airport (SIF)",
+  Nepalgunj: "Nepalgunj Airport (KTM)",
+};
+
+const formatAirportLabel = (city) => {
+  if (!city) return "Unknown airport";
+  const cleaned = city.trim();
+  if (airportNames[cleaned]) {
+    return `${cleaned} — ${airportNames[cleaned]}`;
+  }
+  return cleaned;
+};
+
 function Flight() {
   const navigate = useNavigate();
   const [from, setFrom] = useState("");
@@ -336,11 +354,10 @@ function Flight() {
                     {flight.flightID}
                   </p>
                   <h3 className="text-xl font-bold">
-                    {flight.from} to {flight.to}
+                    {formatAirportLabel(flight.from)} → {formatAirportLabel(flight.to)}
                   </h3>
                   <p className="mt-2 text-sm font-medium text-slate-500">
-                    Departure:{" "}
-                    {new Date(flight.deperaturetime).toLocaleString()}
+                    Departure: {new Date(flight.deperaturetime).toLocaleString()}
                   </p>
                   <p className="mt-1 text-sm font-medium text-slate-500">
                     Arrival: {new Date(flight.arrivaltime).toLocaleString()}
@@ -365,6 +382,27 @@ function Flight() {
                 </div>
               </article>
             ))}
+          </div>
+
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm mt-6">
+            <h3 className="text-xl font-semibold text-slate-950">How your trip is made</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              We build your trip from the route information you enter. Start with your departure city, destination, and travel date. We match that with available flights from our database and show the airport names, departure times, arrival times, and price so you can choose the best option.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl bg-white p-4 text-sm shadow-sm">
+                <p className="font-semibold text-slate-900">1. Search</p>
+                <p className="mt-2 text-slate-600">Enter your from/to airports and date to see valid flight options.</p>
+              </div>
+              <div className="rounded-2xl bg-white p-4 text-sm shadow-sm">
+                <p className="font-semibold text-slate-900">2. Review</p>
+                <p className="mt-2 text-slate-600">View each route with full airport names, timings, and pricing.</p>
+              </div>
+              <div className="rounded-2xl bg-white p-4 text-sm shadow-sm">
+                <p className="font-semibold text-slate-900">3. Book</p>
+                <p className="mt-2 text-slate-600">Select a flight and continue to payment to confirm your booking.</p>
+              </div>
+            </div>
           </div>
         </section>
       )}

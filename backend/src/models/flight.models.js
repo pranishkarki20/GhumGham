@@ -1,7 +1,7 @@
 import mongoose , {Schema} from "mongoose";
 
 const flightsScheme = new Schema({
-    flightID: {
+    airline: {
         type:String,
         required: true, 
         lowercase:true, 
@@ -28,6 +28,24 @@ const flightsScheme = new Schema({
         type:Number,
         required:true,
     },
-});
+    availableseats:{
+        type:Number,
+        required:true,
+    },
+    totalseats:{
+        type:Number, 
+        required:true
+    },
+    status:{
+        type:String, 
+        enum:["scheduled" , "canclled" , "completed"],
+        default:"Scheduled"
+    },
+
+},
+    {
+    timestamps:true
+},
+);
 
 export const Flight = mongoose.model("Flight",flightsScheme)

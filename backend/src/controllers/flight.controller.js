@@ -37,19 +37,21 @@ const searchflights = async(req,res) =>{
 
 const addflight =  async(req , res) => {
     try{
-        const { flightID, from, to, deperaturetime, arrivaltime, price } = req.body;
+        const { airline, from, to, deperaturetime, arrivaltime, price ,availableseats ,totalseats } = req.body;
 
-        if (!flightID || !from || !to || !deperaturetime || !arrivaltime || !price) {
+        if (!airline || !from || !to || !deperaturetime || !arrivaltime || !price || !availableseats || !totalseats) {
             return res.status(400).json({message:"All fields are requied"})
         }
 
         const flight = await Flight.create({
-            flightID,
+            airline,
             from,
             to,
             deperaturetime,
             arrivaltime,
-            price
+            price,
+            availableseats,
+            totalseats
         })
         res.status(201).json({
             message:"Flight is added",

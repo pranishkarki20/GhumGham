@@ -8,6 +8,8 @@ const checklist = ['Passport and visa copy', 'Hotel confirmation', 'Airport tran
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [canceling, setCanceling] = useState(null);
   const token = localStorage.getItem('token');
   const rawUser = localStorage.getItem('user');
   const user = rawUser ? JSON.parse(rawUser) : null;
@@ -16,6 +18,7 @@ export default function MyBookings() {
     const fetchBookings = async () => {
       if (!token) return;
 
+      setLoading(true);
       try {
         const res = await fetch(`${API_BASE}/bookings/me`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -26,15 +29,43 @@ export default function MyBookings() {
         }
 
         const data = await res.json();
-        const confirmedBookings = (Array.isArray(data) ? data : []).filter((item) => item.status === 'Confirmed');
-        setBookings(confirmedBookings);
+        setBookings(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchBookings();
   }, [token]);
+
+  const handleCancel = async (bookingId) => {
+    if (!token) return;
+    setCanceling(bookingId);
+
+    try {
+      const res = await fetch(`${API_BASE}/bookings/${bookingId}/cancel`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error('Unable to cancel booking');
+      }
+
+      const data = await res.json();
+      setBookings((current) => current.map((booking) => (booking._id === bookingId ? data.booking : booking)));
+    } catch (error) {
+      console.error(error);
+      alert('Could not cancel the booking. Please try again.');
+    } finally {
+      setCanceling(null);
+    }
+  };
 
   if (!token) {
     return <Navigate to="/login" replace />;
@@ -44,6 +75,10 @@ export default function MyBookings() {
     return <Navigate to="/admin" replace />;
   }
 
+  const upcomingCount = bookings.filter((booking) => booking.status === 'Confirmed' || booking.status === 'Pending').length;
+  const cancelledCount = bookings.filter((booking) => booking.status === 'Cancelled').length;
+  const totalCount = bookings.length;
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -51,7 +86,7 @@ export default function MyBookings() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-sky-600">My travel dashboard</p>
-              <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Hello, {user?.name || 'Traveler'}.</h1>
+              <h1 className="mt-2 text-3xl font-semibold sm:text-4xl">Hello, {user?.username || user?.name || 'Traveler'}.</h1>
               <p className="mt-3 max-w-2xl text-sm text-slate-600 sm:text-base">
                 Everything about your upcoming journeys, confirmations, and travel essentials in one place.
               </p>
@@ -68,28 +103,30 @@ export default function MyBookings() {
                 <Ticket size={18} />
                 <p className="text-sm font-medium">Upcoming trips</p>
               </div>
-              <p className="mt-3 text-2xl font-semibold text-slate-900">2</p>
+              <p className="mt-3 text-2xl font-semibold text-slate-900">{upcomingCount}</p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center gap-2 text-emerald-600">
                 <CalendarDays size={18} />
-                <p className="text-sm font-medium">Completed stays</p>
+                <p className="text-sm font-medium">Total bookings</p>
               </div>
-              <p className="mt-3 text-2xl font-semibold text-slate-900">5</p>
+              <p className="mt-3 text-2xl font-semibold text-slate-900">{totalCount}</p>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center gap-2 text-violet-600">
                 <Compass size={18} />
-                <p className="text-sm font-medium">Saved favorites</p>
+                <p className="text-sm font-medium">Cancelled bookings</p>
               </div>
-              <p className="mt-3 text-2xl font-semibold text-slate-900">9</p>
+              <p className="mt-3 text-2xl font-semibold text-slate-900">{cancelledCount}</p>
             </div>
           </div>
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.6fr_0.8fr]">
           <div className="space-y-4">
-            {bookings.length > 0 ? bookings.map((booking) => {
+            {loading ? (
+              <div className="rounded-[24px] border border-slate-200 bg-white p-8 text-center text-slate-500">Loading bookings...</div>
+            ) : bookings.length > 0 ? bookings.map((booking) => {
               const badge = booking.status === 'Confirmed'
                 ? 'bg-emerald-500/15 text-emerald-300'
                 : booking.status === 'Pending'
@@ -106,13 +143,21 @@ export default function MyBookings() {
                       </div>
                       <h2 className="mt-2 text-xl font-semibold text-slate-900">{booking.tripTitle}</h2>
                       <div className="mt-3 flex flex-wrap gap-3 text-sm text-slate-600">
-                        <span className="inline-flex items-center gap-2"><CalendarDays size={15} /> {new Date(booking.startDate).toLocaleDateString()} – {new Date(booking.endDate).toLocaleDateString()}</span>
-                        <span className="inline-flex items-center gap-2"><MapPin size={15} /> {booking.destination}</span>
+                        <span className="inline-flex items-center gap-2"><CalendarDays size={15} /> {booking.startDate ? new Date(booking.startDate).toLocaleDateString() : 'TBD'} – {booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'TBD'}</span>
+                        <span className="inline-flex items-center gap-2"><MapPin size={15} /> {booking.destination || 'Unknown'}</span>
                       </div>
                     </div>
-                    <div className="flex flex-col items-start gap-2 sm:items-end">
+                    <div className="flex flex-col items-start gap-3 sm:items-end">
                       <span className={`rounded-full px-3 py-1 text-sm font-medium ${badge}`}>{booking.status}</span>
                       <p className="text-sm font-semibold text-slate-900">${Number(booking.amount || 0).toLocaleString()}</p>
+                      <button
+                        type="button"
+                        disabled={booking.status === 'Cancelled' || canceling === booking._id}
+                        onClick={() => handleCancel(booking._id)}
+                        className="rounded-full bg-rose-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-600"
+                      >
+                        {canceling === booking._id ? 'Cancelling...' : booking.status === 'Cancelled' ? 'Cancelled' : 'Cancel booking'}
+                      </button>
                     </div>
                   </div>
                 </div>

@@ -3,6 +3,7 @@ import userRouter from "../routes/user.route.js";
 import flightrouter from "../routes/flight.routes.js"
 import stayrouter from "../routes/stay.routes.js"
 import bookingRouter from "../routes/booking.routes.js";
+import paymentRoutes from "../routes/payment.routes.js";
 import multer from "multer";
 const app = express(); 
 const allowOrigins = (
@@ -46,4 +47,5 @@ app.use("/api/v1/users" , userRouter)
 app.use("/api/v1/flight", flightrouter)
 app.use("/api/v1/stay", stayrouter)
 app.use("/api/v1/bookings", bookingRouter)
+app.use("/api/payments", paymentRoutes);
 export  default app ; 

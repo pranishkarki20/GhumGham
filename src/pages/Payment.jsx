@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CreditCard, CheckCircle, Clock } from 'lucide-react';
 
+const API_BASE = 'http://localhost:4000/api/v1';
+
 export default function Payment() {
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -13,19 +15,52 @@ export default function Payment() {
   const [cvc, setCvc] = useState('');
   const [processing, setProcessing] = useState(false);
   const [paid, setPaid] = useState(false);
+  const [error, setError] = useState('');
 
-  const amount = booking ? Number(booking.amount || 0) : 0;
+  const amount = booking ? Number(booking.amount || booking.totalAmount || 0) : 0;
 
   const handlePay = async () => {
-    // UI-only: simulate payment process. Replace with backend integration later.
+    if (!booking) return;
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
     setProcessing(true);
-    setTimeout(() => {
-      setProcessing(false);
+    setError('');
+
+    try {
+      const response = await fetch(`${API_BASE}/bookings/cbooking`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          tripTitle: booking.tripTitle,
+          tripType: booking.tripType,
+          destination: booking.destination,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+          totalAmount: amount,
+          currency: booking.currency || 'NPR',
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data?.message || 'Could not create booking');
+      }
+
       setPaid(true);
-      // In a real integration you would POST to /api/v1/payments
-      // then confirm and redirect to bookings page.
-      setTimeout(() => navigate('/my-bookings'), 1700);
-    }, 1400);
+      setTimeout(() => navigate('/my-bookings'), 1400);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Payment failed. Please try again.');
+    } finally {
+      setProcessing(false);
+    }
   };
 
   if (!booking) {
@@ -72,13 +107,14 @@ export default function Payment() {
                 </div>
               </div>
 
-              <div className="mt-6 flex items-center justify-between">
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-sm text-slate-500">Amount</p>
                   <p className="text-xl font-semibold text-slate-900">${amount.toLocaleString()}</p>
                 </div>
-                <div>
-                  <button disabled={processing || paid} onClick={handlePay} className="inline-flex items-center gap-2 rounded bg-slate-900 px-4 py-2 text-sm font-semibold text-white">
+                <div className="space-y-2 text-right">
+                  {error ? <p className="text-sm text-rose-500">{error}</p> : null}
+                  <button disabled={processing || paid} onClick={handlePay} className="inline-flex items-center gap-2 rounded bg-slate-900 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-slate-500">
                     {processing ? (
                       <><Clock className="animate-spin" /> Processing</>
                     ) : paid ? (

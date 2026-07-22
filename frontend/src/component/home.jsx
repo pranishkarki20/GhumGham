@@ -97,51 +97,6 @@ export function Home() {
               ))}
             </div>
           </div>
-
-          <div className="hero-glow mt-10 max-w-3xl rounded-[28px] border border-white/20 bg-white/90 p-4 shadow-2xl backdrop-blur-xl">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center">
-              <div className="flex flex-1 items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                <Search size={18} className="text-slate-500" />
-                <input
-                  type="text"
-                  placeholder="Enter your destination"
-                  className="w-full bg-transparent text-base text-slate-800 outline-none placeholder:text-slate-400"
-                />
-              </div>
-              <button className="rounded-2xl bg-slate-950 px-5 py-3 font-semibold text-white transition hover:bg-slate-800">
-                Find trips
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-slate-950 px-6 py-16 md:px-8 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-400">Why travelers love us</p>
-              <h2 className="text-3xl font-semibold text-white">Everything you need for a smooth getaway</h2>
-            </div>
-            <p className="max-w-xl text-slate-400">
-              From booking to boarding, GhumGham keeps your travel plans effortless and inspiring.
-            </p>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-3">
-            {highlights.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.title} className="soft-card rounded-3xl border border-white/10 bg-slate-900/80 p-6 shadow-lg">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-500/15 text-cyan-300">
-                    <Icon size={22} />
-                  </div>
-                  <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">{item.description}</p>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </section>
     </div>

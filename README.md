@@ -314,7 +314,6 @@ frontend/dist
 
 ## Current Notes
 
-- The app uses JWT tokens stored in `localStorage` for frontend authentication.
 - Protected frontend pages redirect unauthenticated users to login.
 - Admin users are redirected to the admin dashboard, while customers use the booking dashboard.
 - Stripe Checkout is implemented in the backend, while the frontend payment page currently creates confirmed bookings through the booking API.
